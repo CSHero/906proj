@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="GreatTracer">
+</Property><Property Name="Solution File" Value="F:\C#\TEST\GreatTracer\GreatTracer.sln">
+</Property><Property Name="User Options File" Value="F:\C#\TEST\GreatTracer\GreatTracer.suo">
+</Property><Property Name="Date" Value="2015年3月7日">
+</Property><Property Name="Time" Value="16:32">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="GreatTracer.sln" Description="File successfully backed up as F:\C#\TEST\GreatTracer\GreatTracer.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="GreatTracer.suo" Description="File successfully backed up as F:\C#\TEST\GreatTracer\GreatTracer.suo.old">
+</Event><Event ErrorLevel="0" Project="GreatTracer" Source="GreatTracer\GreatTracer.vcproj" Description="Converting project file 'F:\C#\TEST\GreatTracer\GreatTracer\GreatTracer.vcproj'.">
+</Event><Event ErrorLevel="1" Project="GreatTracer" Source="GreatTracer\GreatTracer.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="0" Project="GreatTracer" Source="GreatTracer\GreatTracer.vcproj" Description="Done converting to new project file 'F:\C#\TEST\GreatTracer\GreatTracer\GreatTracer.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="GreatTracer" Source="GreatTracer\GreatTracer.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="GreatTracer.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="GreatTracer.sln" Description="Converted">
+</Event></UpgradeLog>
