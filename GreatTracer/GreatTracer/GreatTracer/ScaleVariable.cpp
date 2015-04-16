@@ -33,8 +33,6 @@ CArray <ModualInfo> ModualWay;//调试方式信息
 CArray<CurPos3D>T1;//存放TIN的点
 CArray<line>T2;//存放TIN的线
 CArray<Triangle>T3;//存放TIN的三角形
-//CArray<GLfloat> TIN_Vertex;
-//GLfloat *tin_ver=new GLfloat[];
 
 GLfloat MapCenterX,MapCenterY,MapCenterZ;//地图或者TIN的中心点，为了保证视图看向地图中心
 

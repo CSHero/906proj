@@ -9,6 +9,7 @@
 
 extern CArray <TxInfo> Point_TxInfo;//发射机信息
 extern CArray <TxInfo> Polygon_TxInfo;
+extern GLfloat Transfer_Z;//引入鼠标指示的高度位置
 
 
 class TX_PROPER_DIALOG : public CDialog

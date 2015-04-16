@@ -283,30 +283,6 @@ void DrawEv::DrawGround(){
 	glVertex3f(-20000.0f, 20000.0f,-1.0f);
 	glEnd();
 }
-
-void DrawEv::fangge(){
-	glBegin(GL_QUADS);
-	glColor3f(1.0f,1.0f,0.0f);
-	glVertex3f(-155,-155,0);
-	glVertex3f(-155,-145,0);
-	glVertex3f(155,-145,0);
-	glVertex3f(155,-155,0);
-	glEnd();
-	for(GLfloat i=-155.0f;i<=155.0;i+=10){
-		glBegin(GL_LINES);
-		glColor3f(0.0f,0.0f,0.0f);
-		glVertex3f(-155.0f,i,0.0f);
-		glVertex3f(155.0f,i,0.0f);
-		glEnd();
-	}
-	for(GLfloat i=-155;i<=155;i+=10){
-		glBegin(GL_LINES);
-		glColor3f(0.0f,0.0f,0.0f);
-		glVertex3f(i,-155.0,0.0f);
-		glVertex3f(i,155.0,0.0f);
-		glEnd();
-	}
-}
 //////////////////////////////////////////////////////////////////////////
 ////////////////////////////能量渲染//////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -351,7 +327,7 @@ void DrawEv::DrawCube(){//绘制收发信机
 			glVertex3f(Polygon_TxInfo[i].Pos.x,Polygon_TxInfo[i].Pos.y,Polygon_TxInfo[i].Pos.z);
 		
 	glEnd();
-	glColor3f(0.0f,1.0f,0.0f);
+	glColor3f(0.0f,0.0f,1.0f);
 	glBegin(GL_POINTS);
 		for(int i=0;i<Point_RxInfo.GetCount();i++)
 			glVertex3f(Point_RxInfo[i].Pos.x,Point_RxInfo[i].Pos.y,Point_RxInfo[i].Pos.z);
@@ -547,7 +523,7 @@ void DrawEv::DrawTIN(){
 	if(T3.GetCount()!=0){
 		glColor3f(0.0f,1.0f,0.0f);
 		glLineWidth(1.5f);
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 		for(int i=0;i<T3.GetCount();i++){
 			glBegin(GL_LINE_LOOP);
 			glVertex3f(T3[i].P1.x,T3[i].P1.y,T3[i].P1.z);

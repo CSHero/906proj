@@ -7,8 +7,6 @@
 extern CArray <CurPos3D> T1;
 extern CArray <line> T2;
 extern CArray <Triangle> T3;
-//extern CArray<GLfloat> TIN_Vertex;
-//extern GLfloat *tin_ver;
 
 class TIN
 {

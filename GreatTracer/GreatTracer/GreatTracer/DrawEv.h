@@ -18,8 +18,6 @@ extern CArray <ModualInfo> ModualWay;//调试方式数组
 extern CArray <CurPos3D> T1;
 extern CArray<line> T2;
 extern CArray<Triangle> T3;
-//extern CArray<GLfloat> TIN_Vertex;
-//extern GLfloat *tin_ver;
 
 extern CArray <GLfloat> CubeVertex_Tx;//收发信机的小立方体坐标
 extern CArray <GLfloat> CubeVertex_Rx;
@@ -64,7 +62,6 @@ public:
 	void RenderOutput();	//渲染结果
 	void DrawTinPoint();//画TIN的点
 	void DrawTIN();//画三角形
-	void fangge();
 private:
 	CStringArray tempCityVertex;//.city地图顶点的临时存放数组
 	CStringArray  tempDxfVertex;//.dxf地图定点的临时存放数组
@@ -79,6 +76,5 @@ public:
 	CArray <GLfloat> PolygonVertex;//多边形的顶点坐标
 	GLuint	texture[1];		// 纹理贴图数组
 	void DrawRect();
-	
 
 };

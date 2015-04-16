@@ -9,7 +9,7 @@ TIN::TIN(void)
 TIN::~TIN(void)
 {
 }
-
+CurPos3D *p=new CurPos3D[1000];//由于点数过多时使用递归会导致栈溢出，现在将点分组分别生成三角网+
 void TIN::OnTin(){
 	
 
@@ -29,38 +29,33 @@ void TIN::OnTin(){
 			this->M_TIN(T1[0],T1[1]);
 		else
 			this->M_TIN(T1[1],T1[0]);
-		//for(int i=0;i<T3.GetCount();i++){
-		//	tin_ver[i*9+0]=T3[i].P1.x;tin_ver[i*9+1]=T3[i].P1.x;tin_ver[i*9+2]=T3[i].P1.z;
-		//	tin_ver[i*9+3]=T3[i].P2.x;tin_ver[i*9+4]=T3[i].P2.x;tin_ver[i*9+5]=T3[i].P2.z;
-		//	tin_ver[i*9+6]=T3[i].P3.x;tin_ver[i*9+7]=T3[i].P3.x;tin_ver[i*9+8]=T3[i].P3.z;
-		//}
 	}
 	else
 		MessageBox(NULL,"请至少输入三个点","tips",MB_OK);
 }
 void TIN::M_TIN(CurPos3D p1,CurPos3D p2){
-	//CurPos3D p3,p4;
-	//p3=GetThirdPoint(p1,p2);
-	//if(p3.x!=0.00 && p3.y!=0.00){
-	//	p4=p3;
-	//	//this->GetTriangle(p1,p2,p4);
-	//	//////////存储边////////////
-	//	line l1;
-	//	l1.P1=p1;
-	//	l1.P2=p2;
+	CurPos3D p3,p4;
+	p3=GetThirdPoint(p1,p2);
+	if(p3.x!=0.00 && p3.y!=0.00){
+		p4=p3;
+		//this->GetTriangle(p1,p2,p4);
+		//////////存储边////////////
+		line l1;
+		l1.P1=p1;
+		l1.P2=p2;
 
-	//	T2.Add(l1);
-	//	//////////////存储三角形//////////////////
-	//	Triangle triangles;
-	//	triangles.P1=p1;
-	//	triangles.P2=p2;
-	//	triangles.P3=p4;
+		T2.Add(l1);
+		//////////////存储三角形//////////////////
+		Triangle triangles;
+		triangles.P1=p1;
+		triangles.P2=p2;
+		triangles.P3=p4;
 
-	//	T3.Add(triangles);
-	//}
-	//else return;
-	//M_TIN(p1,p4);
-	//M_TIN(p4,p2);
+		T3.Add(triangles);
+	}
+	else return;
+	M_TIN(p1,p4);
+	M_TIN(p4,p2);
 }
 
 CurPos3D TIN::GetThirdPoint(CurPos3D p1,CurPos3D p2){
@@ -96,8 +91,7 @@ bool TIN::IsLine(CurPos3D p1,CurPos3D p2){
 	line templine;
 	templine.P1.x=p1.x;templine.P1.y=p1.y;templine.P1.z=p1.z;
 	templine.P2.x=p2.x;templine.P2.y=p2.y;templine.P2.z=p2.z;
-	int n=T2.GetCount();
-	for(int i=0;i<n;i++){
+	for(int i=0;i<T2.GetCount();i++){
 		if(templine.P1.x==T2[i].P1.x&&templine.P1.y==T2[i].P1.y&&templine.P1.z==T2[i].P1.z && templine.P2.x==T2[i].P2.x&&templine.P2.y==T2[i].P2.y&&templine.P2.z==T2[i].P2.z )//画过直线
 			p=false;
 	}
@@ -137,12 +131,9 @@ BOOL TIN::CalculateNormal(){
 }
 
 BOOL TIN::SetTextTure(){
-	if(T3.IsEmpty()){
-		MessageBox(NULL,"还未生成TIN，请在生成TIN后加载纹理！","Tips",MB_OK);
-		return false;
-	}
+
 	//利用bmp图像文件作纹理
-	AUX_RGBImageRec *Image=auxDIBImageLoad("F:\\C#\\TEST\\GreatTracer\\GreatTracer\\GreatTracer\\1.bmp");
+	AUX_RGBImageRec *Image=auxDIBImageLoad("1.bmp");
 	/*  定义纹理 */
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, Image->sizeX,Image->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE,Image->data);
 	/*  控制滤波 */
@@ -177,5 +168,5 @@ BOOL TIN::SetTextTure(){
 	}
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-	return true;
+	return 0;
 }

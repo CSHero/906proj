@@ -2,6 +2,8 @@
 #include "VIEWDLG.h"
 #include "ScaleVariable.h"
 
+extern GLfloat Transfer_Z;//引入鼠标指示的高度位置
+
 
 // RX_DIALOG 对话框
 extern CArray <RxInfo> Polygon_RxInfo;//接收机信息

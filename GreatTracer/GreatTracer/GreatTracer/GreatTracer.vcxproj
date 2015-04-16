@@ -42,7 +42,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
@@ -83,6 +83,10 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <HeapReserveSize>0</HeapReserveSize>
+      <HeapCommitSize>0</HeapCommitSize>
+      <StackReserveSize>0</StackReserveSize>
+      <StackCommitSize>0</StackCommitSize>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -125,6 +129,7 @@
     <ClCompile Include="LoadTexTure.cpp" />
     <ClCompile Include="POLYGON_RX_DIALOG.cpp" />
     <ClCompile Include="POLYGON_TX_DIALOG.cpp" />
+    <ClCompile Include="RAWtoTIN.cpp" />
     <ClCompile Include="ReadandWrite.cpp" />
     <ClCompile Include="RX_DIALOG.cpp" />
     <ClCompile Include="ScaleVariable.cpp" />
@@ -145,6 +150,7 @@
     <ClInclude Include="LoadTexTure.h" />
     <ClInclude Include="POLYGON_RX_DIALOG.h" />
     <ClInclude Include="POLYGON_TX_DIALOG.h" />
+    <ClInclude Include="RAWtoTIN.h" />
     <ClInclude Include="ReadandWrite.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RX_DIALOG.h" />

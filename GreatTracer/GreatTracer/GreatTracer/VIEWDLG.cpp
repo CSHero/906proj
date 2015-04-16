@@ -8,7 +8,6 @@
 #include "VIEWDLG.h"
 
 
-
 ArcBallT arcBall(800,500);
 ArcBallT *ArcBall =&arcBall;//实例化轨迹球类
 
@@ -32,7 +31,9 @@ int BoundaryFlag;//指示多边形是否已经圈定了四个点
 Vec3T ResultPos;//Opengl中的坐标
 CRect m_rect;//获取窗口大小
 Vec3T OrginPoint;//上一次鼠标移过的坐标位置
-	
+GLfloat Transfer_Z;//将鼠标的Z值传递给收发信机设置对话框
+
+int israwtotin=0;//是否由raw生成tin的标识 
 BYTE g_HeightMap[1024*1024];//存储raw点的数组
 
 HCURSOR hCur=LoadCursor(NULL,IDC_CROSS);//鼠标模式指示
@@ -42,8 +43,8 @@ RX_DIALOG *RD;//接收机属性对话框
 ANTE_DIALOG *AnteDlg;//天线属性对话框
 POLYGON_TX_DIALOG *PolyTxDlg;//多发射机对话框
 POLYGON_RX_DIALOG *PolyRxDlg;//多接收机对话框
-ReadandWrite *RW;//读取文件
-CRawToTIN *CRT;//raw to tin 类实例化
+ReadandWrite *RW;
+CRawToTIN CRT;
 
 // CVIEWDLG 对话框
 
@@ -128,8 +129,7 @@ BEGIN_MESSAGE_MAP(CVIEWDLG, CDialog)
 	ON_COMMAND(ID_VIEW_32819, &CVIEWDLG::OnView32819)
 	ON_COMMAND(ID_EDIT_TIN32820, &CVIEWDLG::OnEditTin32820)
 	ON_WM_SIZE()
-	ON_WM_KEYDOWN()
-	ON_COMMAND(ID_FILE_RAW, &CVIEWDLG::OnFileRaw)
+	ON_COMMAND(ID_FILE_DEM, &CVIEWDLG::OnFileDem)
 END_MESSAGE_MAP()
 
 
@@ -142,6 +142,8 @@ void CVIEWDLG::OnPaint()
 	CPaintDC dc(this); // device context for painting
 	// TODO: 在此处添加消息处理程序代码
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if(israwtotin)
+		glClearColor(0.0,0.0,0.0,0.0);
 	//暂时禁用了光照
 	//glLightfv(GL_LIGHT0,GL_POSITION,light_position0);
 	//glLightfv(GL_LIGHT0,GL_SPECULAR,light_specular0);
@@ -156,7 +158,7 @@ void CVIEWDLG::OnPaint()
 	//glTranslatef(-MapCenterX+X_Translating,-MapCenterY+Y_Translating,0.0f);
 	glScalef(ArcBall->zoomRate, ArcBall->zoomRate, ArcBall->zoomRate);//Scale
 	glScalef(1.0, 4.0, 1.0);//此处缩放是为了视觉效果，没有固定含义
-	if(EditMode==0)
+	if(EditMode==0||israwtotin)//在非设置收发信机的条件下允许旋转；在rawtotin时，设置收发信机时也允许旋转
 		glMultMatrixf(ArcBall->Transform.M);     //Rotate
 	glPushMatrix();
 	RenderScene();
@@ -179,17 +181,17 @@ void CVIEWDLG::RenderScene(){
 		de.RenderOutput();
 	if(1==PointVision)
 		de.DrawTinPoint();
-	if(1==TinFlag){
+	if(1==TinFlag)
 		de.DrawTIN();
-		de.DrawRect();
-	}
 	if(1==IsSetTexTure)
 		TinPointer->SetTextTure();
 	if(SetPointOnTin==0&&EditMode!=0)
 		de.DrawGround();
-	de.DrawCube();//只要有收发信级存在就要绘制
 	if(israwtotin)
-		CRT->RenderRawTIN(g_HeightMap);
+		CRT.RenderRawTIN(g_HeightMap);
+	de.DrawCube();
+	de.DrawRect();
+
 }
 void  CVIEWDLG::ReshapeSize(){
 	float range=100.0f;
@@ -219,11 +221,10 @@ void  CVIEWDLG::SetupRC(){
 	glEnable(GL_POLYGON_SMOOTH);
 	glFrontFace(GL_CCW);		
 	glShadeModel(GL_SMOOTH); 
-	glDepthFunc(GL_LEQUAL); 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	
 	glClearColor(1.0f, 1.0f, 1.0f, 0.5f); 
 	glClearDepth(1.0f); 
-	
+	glDepthFunc(GL_LEQUAL); 
 }
 
 void CVIEWDLG::OnSysCommand(UINT nID, LPARAM lParam)
@@ -246,6 +247,7 @@ void CVIEWDLG::OnMouseMove(UINT nFlags, CPoint point)
 	tempy.Format("%.2f",ResultPos.y);
 	CString tempz;
 	tempz.Format("%.2f",ResultPos.z);
+	Transfer_Z=ResultPos.z+1;//将Z值作为高度值传递给收发信机对话框
 
 	SetDlgItemText(IDC_STATIC_X,tempx);
 	SetDlgItemText(IDC_STATIC_Y,tempy);
@@ -260,8 +262,7 @@ void CVIEWDLG::OnMouseMove(UINT nFlags, CPoint point)
 	CDialog::OnMouseMove(nFlags, point);
 }
 
-void CVIEWDLG::OnLButtonDown(UINT nFlags, CPoint point)
-{
+void CVIEWDLG::OnLButtonDown(UINT nFlags, CPoint point){
 	CString tempx,tempy;
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CRect crect;
@@ -674,7 +675,6 @@ void CVIEWDLG::OnFileDxf()
 
 	}
 }
-
 void CVIEWDLG::OnFileCity()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -1042,8 +1042,11 @@ void CVIEWDLG::OnEditModeltin()
 	TinPointer->CalculateNormal();
 
 	TinFlag=1;//指示可以画TIN了
+
 	SetPointOnTin=1;//此时设置收发信机就是要在Tin上
+
 	PointVision=0;//此时就不再画点了，只画TIN
+
 	EditMode=0;//建立TIN后，把编辑模式取消
 }
 
@@ -1145,26 +1148,36 @@ void CVIEWDLG::OnSize(UINT nType, int cx, int cy)
 	//ArcBall->setBounds((GLfloat)cr_Size.Width(),(GLfloat)cr_Size.Height());
 	//SetupRC();
 }
-BOOL   CVIEWDLG::PreTranslateMessage(MSG*   pMsg)     
-{   
+BOOL   CVIEWDLG::PreTranslateMessage(MSG*   pMsg)     {   
 	//onkeydown是无法响应按钮事件的，只能通过重载此函数来实现按钮事件，这是dialog based MFC的特性
 	if(pMsg->message==WM_KEYDOWN)   
 	{   
 		if(pMsg->wParam==VK_UP)
-			ArcBall->zoomRate+=2.0f;
+			ArcBall->zoomRate+=0.2f;
 		if(pMsg->wParam==VK_DOWN)
-			ArcBall->zoomRate-=2.0f;
+			ArcBall->zoomRate-=0.2f;
+		if(pMsg->wParam==VK_SPACE)
+			if(israwtotin)
+				CRT.RenderFlag=!CRT.RenderFlag;
+/*		if(pMsg->wParam==VK_LEFT){
+			if(!light)
+				glEnable(GL_LIGHT1);
+			else
+				glDisable(GL_LIGHT1);
+		}		*/	
 	}
 	return CDialog::PreTranslateMessage(pMsg); 
 }
-void CVIEWDLG::OnFileRaw()
-{
-	// TODO: 在此添加命令处理程序代码
+
+void CVIEWDLG::OnFileDem(){
+	// TODO: Add your command handler code here
+	IsSetTexTure=0;//此时三角网不再继续贴图，否则出错
 	CString path;
 	CFileDialog dlg(TRUE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,".raw|*.raw|all files(*.*)|*.*");
 	if(dlg.DoModal()==IDOK){
 		path=dlg.GetPathName();
 	}
-	CRT->loadRawFile(path,1024*1024,g_HeightMap);
+	CRT.loadRawFile(path,1024*1024,g_HeightMap);
 	israwtotin=1;
+	SetPointOnTin=1;//此时设置收发信机就是要在Tin上
 }

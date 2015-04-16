@@ -36,7 +36,9 @@ END_MESSAGE_MAP()
 
 BOOL TX_PROPER_DIALOG::OnInitDialog(){
 	SetDlgItemText(IDC_EDIT_DESCRIPTION,"Untitled Tx");
-	SetDlgItemText(IDC_EDIT_TX_HEIGHT,"0.0");
+	CString temp;
+	temp.Format("%.2f",Transfer_Z);
+	SetDlgItemText(IDC_EDIT_TX_HEIGHT,temp);
 	SetDlgItemText(IDC_EDIT_CARRIERFRE,"900");
 	SetDlgItemText(IDC_EDIT_INPUTPOWER,"100");
 	SetDlgItemText(IDC_EDIT_ANTE,"0");

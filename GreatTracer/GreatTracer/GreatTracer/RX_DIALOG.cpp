@@ -57,7 +57,9 @@ void RX_DIALOG::OnBnClickedOk()
 
 BOOL RX_DIALOG::OnInitDialog(){
 	SetDlgItemText(IDC_EDIT_RX_PZ_DES,"Untitled Rx");
-	SetDlgItemText(IDC_EDIT__RX_PZ_Z,"5.0");
+	CString temp;
+	temp.Format("%.2f",Transfer_Z);
+	SetDlgItemText(IDC_EDIT__RX_PZ_Z,temp);
 
 	return TRUE;
 }

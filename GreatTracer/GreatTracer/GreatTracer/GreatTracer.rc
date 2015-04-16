@@ -361,7 +361,6 @@ BEGIN
         END
         MENUITEM "TIN",                         ID_FILE_TIN
         MENUITEM "DEM",                         ID_FILE_DEM
-        MENUITEM "Raw",                         ID_FILE_RAW
     END
     MENUITEM SEPARATOR
     POPUP "Edit"
@@ -426,6 +425,10 @@ BEGIN
         MENUITEM "RenderExample",               ID_EXAMPLE_RENDEREXAMPLE
     END
     MENUITEM SEPARATOR
+    POPUP "test"
+    BEGIN
+        MENUITEM "test1",                       ID_TEST_TEST1
+    END
 END
 
 
